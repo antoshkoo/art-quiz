@@ -1,9 +1,20 @@
-// import _ from "lodash";
+import "@/assets/css/style.css";
+import Icon from "@/assets/images/cog.svg";
+import printMe from "@/print.js";
+
 function component() {
   const element = document.createElement("div");
+  const btn = document.createElement("button");
 
-  // Lodash, now imported by this script
   element.innerHTML = "Hello, webpack";
+
+  const newImg = new Image();
+  newImg.src = Icon;
+  element.appendChild(newImg);
+
+  btn.innerHTML = "Click me and check the!";
+  btn.onclick = printMe;
+  element.appendChild(btn);
 
   return element;
 }
