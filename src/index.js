@@ -1,6 +1,8 @@
 import "@/assets/css/style.css";
-import Icon from "@/assets/images/cog.svg";
-import printMe from "@/print.js";
+import "@/assets/css/scss.scss";
+import Icon from "@images/cog.svg";
+import printMe from "@/print";
+
 
 function component() {
   const element = document.createElement("div");

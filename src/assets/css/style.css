@@ -2,3 +2,7 @@ body {
   color: rgb(0, 255, 42);
   background: url("../images/cog.svg") no-repeat;
 }
+button {
+  background-color: black;
+  color: red;
+}

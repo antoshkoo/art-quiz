@@ -1,5 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
   context: path.resolve(__dirname, "src"),
@@ -8,16 +12,16 @@ module.exports = {
     index: "./index.js",
   },
   output: {
-    filename: "bundle.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
   devtool: "inline-source-map",
   resolve: {
-    extensions: ["js"],
+    extensions: [".js"],
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "@components": path.resolve(__dirname, "src/components"),
+      "@images": path.resolve(__dirname, "src/assets/images/"),
     },
   },
   optimization: {
@@ -29,7 +33,11 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -38,16 +46,37 @@ module.exports = {
           filename: "images/[name][ext][query]",
         },
       },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Development",
       template: "./index.html",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/favicon.svg'),
+          to: path.resolve(__dirname, 'dist')
+        },
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "css/bundle.css",
     }),
   ],
   devServer: {
     static: path.resolve(__dirname, "dist"),
     port: 9000,
+    hot: isDev
   },
 };
